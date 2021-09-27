@@ -192,7 +192,7 @@ def build_fit_jobs(particle, probe, resonance, era,
                     # PDF based fits are:
                     #   NominalOld, AltSigOld
                     if doMC and process(outFName) and\
-                            fitType in ['NominalOld', 'AltSigOld']:
+                            fitType in ['Nominal','NominalOld', 'AltSigOld']:
                         os.makedirs(os.path.dirname(outFName), exist_ok=True)
                         _jobs += [(outFName, inFName, binName, templateFName,
                                    plotDir, fitType, 'mc', shiftType, resonance, effType)]

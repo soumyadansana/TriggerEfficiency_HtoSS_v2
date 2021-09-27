@@ -13,22 +13,35 @@ ROOT.gROOT.LoadMacro('RooCMSShape.cc+')
 def hist_fitter(outFName, inFName, binName, templateFName, plotDir,
                 version='Nominal', histType='data', shiftType='Nominal', resonance='Z',
                 effType=''):
-
+    
     # Nominal
     if resonance == 'JPsi':
         tnpNomFitSig = [
-        "meanP[-0.0, -5.0, 5.0]", "sigmaP[0.9, 0.005, 5.0]",
-        "meanF[-0.0, -5.0, 5.0]", "sigmaF[0.9, 0.005, 5.0]",
-        "Gaussian::sigResPass(x, meanP, sigmaP)",
-        "Gaussian::sigResFail(x, meanF, sigmaF)",
+        "mP[3.1, 2.9, 3.3]", "sP[0.01, 0.01, 2]", "aP[2.1]","nP[5,0,15]",
+        "mF[3.1, 2.9, 3.3]", "sF[0.01, 0.01, 1]", "aF[2.1]","nF[2,0,5]",
+        "CBShape::sigPass(x,mP,sP,aP,nP)",
+        "CBShape::sigFail(x,mF,sF,aF,nF)",
         ]
         tnpNomFitBkg = [
+                "alphaP[-2, -10., 10.]",
+                "alphaF[-2, -10., 10.]",
+                "Exponential::bkgPass(x, alphaP)",
+                "Exponential::bkgFail(x, alphaF)",
+                ]
+    #if resonance == 'JPsi':
+    #    tnpNomFitSig = [
+    #    "meanP[-0.0, -5.0, 5.0]", "sigmaP[0.9, 0.005, 5.0]",
+    #    "meanF[-0.0, -5.0, 5.0]", "sigmaF[0.9, 0.005, 5.0]",
+    #    "Gaussian::sigResPass(x, meanP, sigmaP)",
+    #    "Gaussian::sigResFail(x, meanF, sigmaF)",
+    #    ]
+    #    tnpNomFitBkg = [
             # Linear background
             # "Chebychev::bkgPass(x, cPass[0,-1,1])",
             # "Chebychev::bkgFail(x, cFail[0,-1,1])",
             # Quadratic background
-            "Chebychev::bkgPass(x, {cPass1[0,-1,1], cPass2[0,-1,1]})",
-            "Chebychev::bkgFail(x, {cFail1[0,-1,1], cFail2[0,-1,1]})",
+    #        "Chebychev::bkgPass(x, {cPass1[0,-1,1], cPass2[0,-1,1]})",
+    #        "Chebychev::bkgFail(x, {cFail1[0,-1,1], cFail2[0,-1,1]})",
             # CMSShape background (note it was designed for Z->ll)
             # (look at RooCMSShape.cc)
             # "acmsP[2.9, 2.0, 4.0]", "betaP[0.05, 0.001, 0.10]",
@@ -37,7 +50,7 @@ def hist_fitter(outFName, inFName, binName, templateFName, plotDir,
             # "gammaF[0.1, -20, 20]", "peakF[3.1]",
             # "RooCMSShape::bkgPass(x, acmsP, betaP, gammaP, peakP)",
             # "RooCMSShape::bkgFail(x, acmsF, betaF, gammaF, peakF)",
-        ]
+    #    ]
     else:
         tnpNomFitSig = [
         "meanP[-0.0, -5.0, 5.0]", "sigmaP[0.9, 0.05, 5.0]",
@@ -64,30 +77,45 @@ def hist_fitter(outFName, inFName, binName, templateFName, plotDir,
             ]
 
     # NominalOld
-    tnpNomFitOldSig = [
-        "meanP1[90.0, 80.0, 100.0]", "sigmaP1[0.9, 0.5, 3.0]",
-        "widthP1[2.495]",
-        "meanF1[90.0, 80.0, 100.0]", "sigmaF1[0.9, 0.5, 3.0]",
-        "widthF1[2.495]",
-        "meanP2[90.0, 80.0, 100.0]", "sigmaP2[4.0, 3.0, 10.0]",
-        "widthP2[2.495]",
-        "meanF2[90.0, 80.0, 100.0]", "sigmaF2[4.0, 3.0, 10.0]",
-        "widthF2[2.495]",
-        "Voigtian::sigPass1(x, meanP1, widthP1, sigmaP1)",
-        "Voigtian::sigFail1(x, meanF1, widthF1, sigmaF1)",
-        "Voigtian::sigPass2(x, meanP2, widthP2, sigmaP2)",
-        "Voigtian::sigFail2(x, meanF2, widthF2, sigmaF2)",
-        "SUM::sigPass(fP[0.7, 0.5, 1]*sigPass1, sigPass2)",
-        "SUM::sigFail(fF[0.7, 0.5, 1]*sigFail1, sigFail2)",
-    ]
-    tnpNomFitOldBkg = [
-        "acmsP[70., 50., 90.]", "betaP[0.05, 0.01, 0.08]",
-        "gammaP[0.1, -2, 2]", "peakP[90.0]",
-        "acmsF[70., 50., 90.]", "betaF[0.05, 0.01, 0.08]",
-        "gammaF[0.1, -2, 2]", "peakF[90.0]",
-        "RooCMSShape::bkgPass(x, acmsP, betaP, gammaP, peakP)",
-        "RooCMSShape::bkgFail(x, acmsF, betaF, gammaF, peakF)",
-    ]
+    # try 1
+    if resonance == 'JPsi':
+        tnpNomFitOldSig = [
+        "mP[3.1, 2.9, 3.3]", "sP[0.005, 0.001, 5]", "aP[2.1]","nP[5,0,20]",
+        "mF[3.1, 2.9, 3.3]", "sF[0.005, 0.001, 5]", "aF[2.1]","nF[2,0,20]",
+        "CBShape::sigPass(x,mP,sP,aP,nP)",
+        "CBShape::sigFail(x,mF,sF,aF,nF)",
+        ]
+        tnpNomFitOldBkg = [
+                "alphaP[-2, -10., 10.]",
+                "alphaF[-2, -10., 10.]",
+                "Exponential::bkgPass(x, alphaP)",
+                "Exponential::bkgFail(x, alphaF)",
+                ]
+    else:
+        tnpNomFitOldSig = [
+            "meanP1[90.0, 80.0, 100.0]", "sigmaP1[0.9, 0.5, 3.0]",
+            "widthP1[2.495]",
+            "meanF1[90.0, 80.0, 100.0]", "sigmaF1[0.9, 0.5, 3.0]",
+            "widthF1[2.495]",
+            "meanP2[90.0, 80.0, 100.0]", "sigmaP2[4.0, 3.0, 10.0]",
+            "widthP2[2.495]",
+            "meanF2[90.0, 80.0, 100.0]", "sigmaF2[4.0, 3.0, 10.0]",
+            "widthF2[2.495]",
+            "Voigtian::sigPass1(x, meanP1, widthP1, sigmaP1)",
+            "Voigtian::sigFail1(x, meanF1, widthF1, sigmaF1)",
+            "Voigtian::sigPass2(x, meanP2, widthP2, sigmaP2)",
+            "Voigtian::sigFail2(x, meanF2, widthF2, sigmaF2)",
+            "SUM::sigPass(fP[0.7, 0.5, 1]*sigPass1, sigPass2)",
+            "SUM::sigFail(fF[0.7, 0.5, 1]*sigFail1, sigFail2)",
+        ]
+        tnpNomFitOldBkg = [
+            "acmsP[70., 50., 90.]", "betaP[0.05, 0.01, 0.08]",
+            "gammaP[0.1, -2, 2]", "peakP[90.0]",
+            "acmsF[70., 50., 90.]", "betaF[0.05, 0.01, 0.08]",
+            "gammaF[0.1, -2, 2]", "peakF[90.0]",
+            "RooCMSShape::bkgPass(x, acmsP, betaP, gammaP, peakP)",
+            "RooCMSShape::bkgFail(x, acmsF, betaF, gammaF, peakF)",
+        ]
 
     # AltSig (note, originally was CB for res, but took too long)
     if resonance == 'JPsi':
@@ -146,9 +174,14 @@ def hist_fitter(outFName, inFName, binName, templateFName, plotDir,
     if version == 'Nominal':
         tnpWorkspace.extend(tnpNomFitSig)
         tnpWorkspace.extend(tnpNomFitBkg)
+        doTemplate = False
     if version == 'NominalOld':
         tnpWorkspace.extend(tnpNomFitOldSig)
         tnpWorkspace.extend(tnpNomFitOldBkg)
+        doTemplate = False
+    if version == 'Exptl':
+        tnpWorkspace.extend(tnpNomFitSigTry1)
+        tnpWorkspace.extend(tnpNomFitBkgTry1)
         doTemplate = False
     if version == 'AltSigOld':
         tnpWorkspace.extend(tnpAltSigFitOld)
