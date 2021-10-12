@@ -46,7 +46,8 @@
     "binVariables": [
         ["abseta", "pt"],
         ["pair_dR","pt_2"],
-        ["eta","pt_cut"]  
+        ["eta","pt_cut"],
+        ["pair_dR","pt_cut"]  
     ],
     "shifts": {
     },
