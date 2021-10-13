@@ -1,6 +1,9 @@
 #!/bin/bash
 echo "========================================="
-echo "First arg: $1"
-echo "Second arg: $2"
-echo "Third arg: $3"
+ptr=$1
+n1=$2
+n2=$(expr $n1 + $3)
+echo "First arg: $ptr"
+echo "Second arg: $n1"
+echo "Third arg: $n2"
 echo "========================================="
