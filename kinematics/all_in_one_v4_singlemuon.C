@@ -62,6 +62,8 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
   int pair_rank;
   float tag_relIso04;
   float probe_relIso04;
+  float tag_relIso04_new;//defined by subtracting pT of other leg
+  float probe_relIso04_new;
   float tag_dz;
   float probe_dz;
   
@@ -130,8 +132,8 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
   TH1F* h_pair_absdz_Pass = new TH1F("h_pair_absdz_Pass", "pair_absdz_Pass", 400, 0., 2.0);
   
   //double edges[8] = {0., 0.05, 0.10, 0.15, 0.20, 0.25, 0.40, 1.0};
-  //TH1F* h_tag_pfIso = new TH1F("h_tag_pfIso", "tag_pfIso", 7, edges);
-  //TH1F* h_probe_pfIso = new TH1F("h_probe_pfIso", "probe_pfIso", 7, edges);
+  TH1F* h_tag_pfIso = new TH1F("h_tag_pfIso", "tag_pfIso", 100, 0., 1.);
+  TH1F* h_probe_pfIso = new TH1F("h_probe_pfIso", "probe_pfIso", 100, 0.,1.);
   
   TH1F* h_tag_relIso04 = new TH1F("h_tag_relIso04", "tag_relIso04", 100, 0., 10.);
   TH1F* h_probe_relIso04 = new TH1F("h_probe_relIso04", "probe_relIso04", 100, 0., 10.);
@@ -160,6 +162,27 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
   TH2F* h_dR_probe_relIso04_Pass = new TH2F("h_dR_probe_relIso04_Pass", "dR_probe_relIso04_Pass", 100, 0.0, 1.0, 100, 0., 10.);
   TH2F* h_probe_relIso04_tag_relIso04_Pass = new TH2F("h_probe_relIso04_tag_relIso04_Pass", "probe_relIso04_tag_relIso04_Pass", 100, 0.0, 10.0, 100, 0., 10.);
   TH2F* h_probe_relIso04_tag_relIso04 = new TH2F("h_probe_relIso04_tag_relIso04", "probe_relIso04_tag_relIso04", 100, 0.0, 10.0, 100, 0., 10.);
+  
+  TH1F* h_tag_relIso04_new = new TH1F("h_tag_relIso04_new", "tag_relIso04_new", 100, 0., 10.);
+  TH1F* h_probe_relIso04_new = new TH1F("h_probe_relIso04_new", "probe_relIso04_new", 100, 0., 10.);
+  
+  TH1F* h_tag_relIso04_new_Pass = new TH1F("h_tag_relIso04_new_Pass", "tag_relIso04_new_Pass", 100, 0., 10.);
+  TH1F* h_probe_relIso04_new_Pass = new TH1F("h_probe_relIso04_new_Pass", "probe_relIso04_new_Pass", 100, 0., 10.);
+  
+  TH2F* h_tag_pt_tag_relIso04_new = new TH2F("h_tag_pt_tag_relIso04_new", "tag_pt_tag_relIso04_new", 500, 0.0, 500.0, 100, 0., 10.);
+  TH2F* h_tag_pt_probe_relIso04_new = new TH2F("h_tag_pt_probe_relIso04_new", "tag_pt_probe_relIso04_new", 500, 0.0, 500.0, 100, 0., 10.);
+  TH2F* h_probe_pt_tag_relIso04_new = new TH2F("h_probe_pt_tag_relIso04_new", "probe_pt_tag_relIso04_new", 500, 0.0, 500.0, 100, 0., 10.);
+  TH2F* h_probe_pt_probe_relIso04_new = new TH2F("h_probe_pt_probe_relIso04_new", "probe_pt_probe_relIso04_new", 500, 0.0, 500.0, 100, 0., 10.);
+  TH2F* h_tag_pt_tag_relIso04_new_Pass = new TH2F("h_tag_pt_tag_relIso04_new_Pass", "tag_pt_tag_relIso04_new_Pass", 500, 0.0, 500.0, 100, 0., 10.);
+  TH2F* h_tag_pt_probe_relIso04_new_Pass = new TH2F("h_tag_pt_probe_relIso04_new_Pass", "tag_pt_probe_relIso04_new_Pass", 500, 0.0, 500.0, 100, 0., 10.);
+  TH2F* h_probe_pt_tag_relIso04_new_Pass = new TH2F("h_probe_pt_tag_relIso04_new_Pass", "probe_pt_tag_relIso04_new_Pass", 500, 0.0, 500.0, 100, 0., 10.);
+  TH2F* h_probe_pt_probe_relIso04_new_Pass = new TH2F("h_probe_pt_probe_relIso04_new_Pass", "probe_pt_probe_relIso04_new_Pass", 500, 0.0, 500.0, 100, 0., 10.);
+  TH2F* h_dR_tag_relIso04_new = new TH2F("h_dR_tag_relIso04_new", "dR_tag_relIso04_new", 100, 0.0, 1.0, 100, 0., 10.);
+  TH2F* h_dR_probe_relIso04_new = new TH2F("h_dR_probe_relIso04_new", "dR_probe_relIso04_new", 100, 0.0, 1.0, 100, 0., 10.);
+  TH2F* h_dR_tag_relIso04_new_Pass = new TH2F("h_dR_tag_relIso04_new_Pass", "dR_tag_relIso04_new_Pass", 100, 0.0, 1.0, 100, 0., 10.);
+  TH2F* h_dR_probe_relIso04_new_Pass = new TH2F("h_dR_probe_relIso04_new_Pass", "dR_probe_relIso04_new_Pass", 100, 0.0, 1.0, 100, 0., 10.);
+  TH2F* h_probe_relIso04_tag_relIso04_new_Pass = new TH2F("h_probe_relIso04_tag_relIso04_new_Pass", "probe_relIso04_tag_relIso04_new_Pass", 100, 0.0, 10.0, 100, 0., 10.);
+  TH2F* h_probe_relIso04_tag_relIso04_new = new TH2F("h_probe_relIso04_tag_relIso04_new", "probe_relIso04_tag_relIso04_new", 100, 0.0, 10.0, 100, 0., 10.);
   
   //do {
   if (n1<=n1_ini[ptr]) n1=n1_ini[ptr];
@@ -248,12 +271,16 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
 		  // tag_charge > 0, probe_charge < 0
       if (tag_pt > 8 && abs(tag_eta) < 2.4 && tag_isTight == 1 && (tag_HLT_Mu8_v == 1 || tag_HLT_Mu17_v == 1 || tag_HLT_Mu20_v == 1) && abs(probe_eta) < 2.4 && probe_pt>2 && pair_dR >= 0.1 && abs(tag_dz)<0.5 && abs(probe_dz)<0.5)  {
       //if (((tag_HLT_Mu7p5_Track2_Jpsi_v == 1) && (probe_HLT_Mu7p5_Track2_Jpsi_v == 1)) && ((tag_charge>0)&&(probe_charge<0))) {
-        sum_tag = tag_pfIso04_neutral + tag_pfIso04_photon - 0.5*tag_pfIso04_sumPU + abs(tag_pfIso04_neutral + tag_pfIso04_photon - 0.5*tag_pfIso04_sumPU);
-        sum_probe = probe_pfIso04_neutral + probe_pfIso04_photon - 0.5*probe_pfIso04_sumPU + abs(probe_pfIso04_neutral + probe_pfIso04_photon - 0.5*probe_pfIso04_sumPU);
-        tag_pfIso = (tag_pfIso04_charged + 0.5 * sum_tag) / tag_pt;
-        probe_pfIso = (probe_pfIso04_charged + 0.5 * sum_probe) / probe_pt;
-    
-        h_HLT_IsoMu27_v->Fill(HLT_IsoMu27_v);
+        //sum_tag = tag_pfIso04_neutral + tag_pfIso04_photon - 0.5*tag_pfIso04_sumPU + abs(tag_pfIso04_neutral + tag_pfIso04_photon - 0.5*tag_pfIso04_sumPU);
+        //sum_probe = probe_pfIso04_neutral + probe_pfIso04_photon - 0.5*probe_pfIso04_sumPU + abs(probe_pfIso04_neutral + probe_pfIso04_photon - 0.5*probe_pfIso04_sumPU);
+        tag_pfIso = (tag_pfIso04_charged + std::max(0., tag_pfIso04_neutral + tag_pfIso04_photon - 0.5*tag_pfIso04_sumPU))/tag_pt;
+        probe_pfIso = (probe_pfIso04_charged + std::max(0., probe_pfIso04_neutral + probe_pfIso04_photon - 0.5*probe_pfIso04_sumPU))/probe_pt;
+        
+        tag_relIso04_new = tag_relIso04 - (probe_pt/tag_pt);
+        if (tag_relIso04_new < 0) tag_relIso04=0;
+        probe_relIso04_new = probe_relIso04 - (tag_pt/probe_pt);
+        if (probe_relIso04_new < 0) probe_relIso04=0;
+	h_HLT_IsoMu27_v->Fill(HLT_IsoMu27_v);
         h_tag_charge->Fill(tag_charge);
         h_probe_charge->Fill(probe_charge);
         //cout<<"probe_charge-"<<probe_charge<<endl;
@@ -263,7 +290,7 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
         h_tag_pt->Fill(tag_pt);
         h_tag_eta->Fill(tag_eta);
         h_tag_phi->Fill(tag_phi);
-        //h_tag_pfIso->Fill(tag_pfIso);
+        h_tag_pfIso->Fill(tag_pfIso);
         h_probe_HLT_IsoMu27_v->Fill(probe_HLT_IsoMu27_v);
         h_probe_isTight->Fill(probe_isTight);
         h_probe_isMedium->Fill(probe_isMedium);
@@ -271,7 +298,7 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
         h_probe_pt->Fill(probe_pt);
         h_probe_eta->Fill(probe_eta);
         h_probe_phi->Fill(probe_phi);
-        //h_probe_pfIso->Fill(probe_pfIso);
+        h_probe_pfIso->Fill(probe_pfIso);
         
         h_pair_mass->Fill(pair_mass);
         h_pair_pt->Fill(pair_pt);
@@ -305,6 +332,18 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
         h_dR_probe_relIso04->Fill(pair_dR, probe_relIso04);
         h_probe_relIso04_tag_relIso04->Fill(probe_relIso04,tag_relIso04);
         
+        
+        h_tag_relIso04_new->Fill(tag_relIso04_new);
+        h_probe_relIso04_new->Fill(probe_relIso04_new);
+        
+        h_tag_pt_tag_relIso04_new->Fill(tag_pt, tag_relIso04_new);
+        h_tag_pt_probe_relIso04_new->Fill(tag_pt, probe_relIso04_new);
+        h_probe_pt_tag_relIso04_new->Fill(probe_pt, tag_relIso04_new);
+        h_probe_pt_probe_relIso04_new->Fill(probe_pt, probe_relIso04_new);
+        h_dR_tag_relIso04_new->Fill(pair_dR, tag_relIso04_new);
+        h_dR_probe_relIso04_new->Fill(pair_dR, probe_relIso04_new);
+        h_probe_relIso04_tag_relIso04_new->Fill(probe_relIso04_new,tag_relIso04_new);
+        
         if (probe_HLT_IsoMu27_v == 1) {
           h_pair_dR_Pass->Fill(pair_dR);
           h_pv_z_Pass->Fill(pv_z);
@@ -317,6 +356,7 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
           h_tag_pt_pair_dR_Pass->Fill(tag_pt, pair_dR);
           h_probe_pt_pair_dR_Pass->Fill(probe_pt, pair_dR);
           h_tag_pt_probe_pt_Pass->Fill(tag_pt,probe_pt);    
+          
           h_probe_relIso04_Pass->Fill(probe_relIso04);
           h_tag_relIso04_Pass->Fill(tag_relIso04);
           
@@ -326,7 +366,18 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
           h_probe_pt_probe_relIso04_Pass->Fill(probe_pt, probe_relIso04);
           h_dR_tag_relIso04_Pass->Fill(pair_dR, tag_relIso04);
           h_dR_probe_relIso04_Pass->Fill(pair_dR, probe_relIso04);
-          h_probe_relIso04_tag_relIso04_Pass->Fill(probe_relIso04,tag_relIso04);
+          h_probe_relIso04_tag_relIso04_Pass->Fill(probe_relIso04_new,tag_relIso04);
+          
+          h_probe_relIso04_new_Pass->Fill(probe_relIso04_new);
+          h_tag_relIso04_new_Pass->Fill(tag_relIso04_new);
+          
+          h_tag_pt_tag_relIso04_new_Pass->Fill(tag_pt, tag_relIso04_new);
+          h_tag_pt_probe_relIso04_new_Pass->Fill(tag_pt, probe_relIso04_new);
+          h_probe_pt_tag_relIso04_new_Pass->Fill(probe_pt, tag_relIso04_new);
+          h_probe_pt_probe_relIso04_new_Pass->Fill(probe_pt, probe_relIso04_new);
+          h_dR_tag_relIso04_new_Pass->Fill(pair_dR, tag_relIso04_new);
+          h_dR_probe_relIso04_new_Pass->Fill(pair_dR, probe_relIso04_new);
+          h_probe_relIso04_tag_relIso04_new_Pass->Fill(probe_relIso04_new,tag_relIso04_new);
         
           
         }
@@ -347,7 +398,7 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
   
   //h_pt_denom1->Draw();
   TFile* out_file = new TFile(Form("hists_secondset_2017%s_UL_[%d-%d]_filter_matching_singlemuon.root",era[ptr-1],n1,n2),"Recreate");
-  
+	
   h_HLT_IsoMu27_v->Write();
   h_tag_HLT_IsoMu27_v->Write();
   h_probe_HLT_IsoMu27_v->Write();
@@ -362,8 +413,8 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
   h_probe_pt->Write();
   h_probe_eta->Write();
   h_probe_phi->Write();
-  //h_tag_pfIso->Write();
-  //h_probe_pfIso->Write();
+  h_tag_pfIso->Write();
+  h_probe_pfIso->Write();
   h_tag_charge->Write();
   h_probe_charge->Write();
        
@@ -421,6 +472,28 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
   h_dR_tag_relIso04_Pass->Write();
   h_probe_relIso04_tag_relIso04->Write();
   h_probe_relIso04_tag_relIso04_Pass->Write();
+  
+  
+  h_tag_relIso04_new->Write();
+  h_probe_relIso04_new->Write(); 
+  
+  h_tag_relIso04_new_Pass->Write();
+  h_probe_relIso04_new_Pass->Write();
+  
+  h_tag_pt_tag_relIso04_new_Pass->Write();
+  h_tag_pt_probe_relIso04_new_Pass->Write();
+  h_probe_pt_tag_relIso04_new_Pass->Write();
+  h_probe_pt_probe_relIso04_new_Pass->Write();
+  h_tag_pt_tag_relIso04_new->Write();
+  h_tag_pt_probe_relIso04_new->Write();
+  h_probe_pt_tag_relIso04_new->Write();
+  h_probe_pt_probe_relIso04_new->Write();
+  h_dR_probe_relIso04_new->Write();
+  h_dR_tag_relIso04_new->Write();
+  h_dR_probe_relIso04_new_Pass->Write();
+  h_dR_tag_relIso04_new_Pass->Write();
+  h_probe_relIso04_tag_relIso04_new->Write();
+  h_probe_relIso04_tag_relIso04_new_Pass->Write();
         
   
   out_file->Close();
