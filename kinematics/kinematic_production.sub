@@ -1,0 +1,12 @@
+executable = JobTemplate_old.sh
+arguments = $(ptr) $(n1) $(n2)
+
+transfer_input_files = all_in_one_v4_singlemuon.C
+should_transfer_files = yes
+when_to_transfer_output = ON_EXIT
+
+error = error.txt
+output = out.txt
+log = log.txt
+
+queue ptr,n1,n2 from params.txt
