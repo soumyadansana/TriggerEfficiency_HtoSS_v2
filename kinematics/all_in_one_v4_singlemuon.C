@@ -287,21 +287,12 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
         tag_pfIso = (tag_pfIso04_charged + std::max(0., tag_pfIso04_neutral + tag_pfIso04_photon - 0.5*tag_pfIso04_sumPU))/tag_pt;
         probe_pfIso = (probe_pfIso04_charged + std::max(0., probe_pfIso04_neutral + probe_pfIso04_photon - 0.5*probe_pfIso04_sumPU))/probe_pt;
         
-<<<<<<< HEAD
 				h_probe_pfIso_tag_pfIso->Fill(probe_pfIso,tag_pfIso);
 				h_tag_pfIso04_charged->Fill(tag_pfIso04_charged);
 				h_probe_pfIso04_charged->Fill(probe_pfIso04_charged);
 				h_tag_pfIso04_charged_nVertices->Fill(tag_pfIso04_charged,nVertices);
 				h_tag_pfIso04_charged_nPUInteractions->Fill(tag_pfIso04_charged,nPUInteractions);
 				h_tag_pfIso04_charged_pv_z->Fill(tag_pfIso04_charged,pv_z);
-=======
-				h_probe_pfIso_tag_pfIso = Fill(probe_pfIso,tag_pfIso);
-				h_tag_pfIso04_charged = Fill(tag_pfIso04_charged);
-				h_probe_pfIso04_charged = Fill(probe_pfIso04_charged);
-				h_tag_pfIso04_charged_nVertices = Fill(tag_pfIso04_charged,nVertices);
-				h_tag_pfIso04_charged_nPUInteractions = Fill(tag_pfIso04_charged,nPUInteractions);
-				h_tag_pfIso04_charged_pv_z = Fill(tag_pfIso04_charged,pv_z);
->>>>>>> 4437ffcedf6f5f4a88687b8012e709501ba2f505
 
 				
         tag_relIso04_new = tag_relIso04 - (probe_pt/tag_pt);
@@ -524,21 +515,12 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
   h_probe_relIso04_tag_relIso04_new_Pass->Write();
 	
 	
-<<<<<<< HEAD
 	h_probe_pfIso_tag_pfIso->Write();
 	h_tag_pfIso04_charged->Write();
 	h_probe_pfIso04_charged->Write();
 	h_tag_pfIso04_charged_nVertices->Write();
 	h_tag_pfIso04_charged_nPUInteractions->Write();
 	h_tag_pfIso04_charged_pv_z->Write();
-=======
-	h_probe_pfIso_tag_pfIso = Write();
-	h_tag_pfIso04_charged = Write();
-	h_probe_pfIso04_charged = Write();
-	h_tag_pfIso04_charged_nVertices = Write();
-	h_tag_pfIso04_charged_nPUInteractions = Write();
-	h_tag_pfIso04_charged_pv_z = Write();
->>>>>>> 4437ffcedf6f5f4a88687b8012e709501ba2f505
 	
         
   
