@@ -280,7 +280,13 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
 		  //h_HLT_Mu8_v->Fill(HLT_Mu8_v);
 		  h_HLT_singlemu_trig->Fill((HLT_Mu8_v == 1) || (HLT_Mu17_v == 1) || (HLT_Mu20_v == 1));
 		  // tag_charge > 0, probe_charge < 0
-      if (tag_pt > 8 && abs(tag_eta) < 2.4 && tag_isTight == 1 && (tag_HLT_Mu8_v == 1 || tag_HLT_Mu17_v == 1 || tag_HLT_Mu20_v == 1) && abs(probe_eta) < 2.4 && probe_pt>10 && pair_dR >= 0.1 && abs(tag_dz)<0.5 && abs(probe_dz)<0.5)  {
+
+      tag_relIso04_new = tag_relIso04 - (probe_pt/tag_pt);
+      if (tag_relIso04_new < 0) tag_relIso04_new=0;
+      probe_relIso04_new = probe_relIso04 - (tag_pt/probe_pt);
+      if (probe_relIso04_new < 0) probe_relIso04_new=0;
+      
+      if (tag_pt > 8 && abs(tag_eta) < 2.4 && tag_isTight == 1 && (tag_HLT_Mu8_v == 1 || tag_HLT_Mu17_v == 1 || tag_HLT_Mu20_v == 1) && abs(probe_eta) < 2.4 && probe_pt>5 && pair_dR >= 0.1 && abs(tag_dz)<0.5 && abs(probe_dz)<0.5 && (tag_relIso04_new<1))  {
       //if (((tag_HLT_Mu7p5_Track2_Jpsi_v == 1) && (probe_HLT_Mu7p5_Track2_Jpsi_v == 1)) && ((tag_charge>0)&&(probe_charge<0))) {
         //sum_tag = tag_pfIso04_neutral + tag_pfIso04_photon - 0.5*tag_pfIso04_sumPU + abs(tag_pfIso04_neutral + tag_pfIso04_photon - 0.5*tag_pfIso04_sumPU);
         //sum_probe = probe_pfIso04_neutral + probe_pfIso04_photon - 0.5*probe_pfIso04_sumPU + abs(probe_pfIso04_neutral + probe_pfIso04_photon - 0.5*probe_pfIso04_sumPU);
@@ -295,10 +301,6 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
 				h_tag_pfIso04_charged_pv_z->Fill(tag_pfIso04_charged,pv_z);
 
 				
-        tag_relIso04_new = tag_relIso04 - (probe_pt/tag_pt);
-        if (tag_relIso04_new < 0) tag_relIso04_new=0;
-        probe_relIso04_new = probe_relIso04 - (tag_pt/probe_pt);
-        if (probe_relIso04_new < 0) probe_relIso04_new=0;
 	h_HLT_IsoMu27_v->Fill(HLT_IsoMu27_v);
         h_tag_charge->Fill(tag_charge);
         h_probe_charge->Fill(probe_charge);

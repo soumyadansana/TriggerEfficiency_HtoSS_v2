@@ -1,9 +1,0 @@
-=========================================
-First arg: 1
-Second arg: 2
-Third arg: 3
-
-Processing all_in_one_v4_singlemuon.C(1,2,3)...
-File number - 2
-File number - 3
-=========================================
