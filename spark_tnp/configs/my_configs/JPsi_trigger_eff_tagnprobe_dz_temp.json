@@ -15,6 +15,8 @@
         "probe_abseta": "abs(probe_eta)",
         "tag_abseta": "abs(tag_eta)",
         "pair_absdz": "abs(pair_dz)",
+        "tag_relIso04_new": "tag_relIso04 - (probe_pt/tag_pt)",
+        "probe_relIso04_new": "probe_relIso04 - (tag_pt/probe_pt)",
         "TightID_Iso015": "probe_isTight == 1 and probe_PFIsoTight == 1",
         "LooseID_Iso040": "probe_isLoose == 1 and probe_PFIsoLoose == 1",
         "HLT_IsoMu27": "probe_HLT_IsoMu27_v==1"
@@ -44,7 +46,7 @@
     "fitVariable": "mass",
     "fitVariableGen": "mcMass",
     "binVariables": [
-        ["pair_dR","pt_cut"]  
+        ["abseta", "pt"]
     ],
     "shifts": {
     },
