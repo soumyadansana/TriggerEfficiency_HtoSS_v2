@@ -1,0 +1,6 @@
+from pyspark.sql import SparkSession
+spark = SparkSession\
+	.builder\
+	.appName("TnP")
+spark = spark.getOrCreate()
+baseDF = spark.read.parquet("/eos/user/s/sdansana/Run2017_UL/MINIAOD/JPsi_pythia8/tnp.parquet")
