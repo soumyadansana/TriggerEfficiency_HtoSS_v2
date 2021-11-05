@@ -42,7 +42,7 @@
         "subEra": "Run2017E",
         "probe": "generalTracks",
         "parquet": ["/user/sdansana/parquet/muon/JPsi/Run2017_UL/MiniAOD/Run2017E/tnp.parquet"],
-        "root": ["/eos/user/s/sdansana/TnP_ntuples/muon/JPsi/Run2017_UL/MINIAOD/Charmonium/crab_TnP_ntuplizer_muon_JPsi_Run2017_UL_MINIAOD_Run2017F/210531_040519/0000/*.root"],
+        "root": ["/eos/user/s/sdansana/TnP_ntuples/muon/JPsi/Run2017_UL/MINIAOD/Charmonium/crab_TnP_ntuplizer_muon_JPsi_Run2017_UL_MINIAOD_Run2017E/210531_000746/0000/*.root"],
         "treename": "muon/Events",
         "luminosity": 9.278,
         "version": 1

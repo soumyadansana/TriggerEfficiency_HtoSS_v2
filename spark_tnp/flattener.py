@@ -17,7 +17,8 @@ from muon_definitions import (get_miniIso_dataframe,
                               get_weighted_dataframe,
                               get_binned_dataframe,
                               get_extended_eff_name,
-                              get_full_name)
+                              get_full_name,
+                              get_prescaled_dataframe)
 
 useParquet = True
 
@@ -93,7 +94,9 @@ def run_flattening(spark, particle, probe, resonance, era, subEra,
     # build the weights (pileup for MC)
     weightedDF = get_weighted_dataframe(
         tagsDF, doGen, resonance, era, subEra, shift=shift)
-
+    
+    weightedDF = get_prescaled_dataframe(weightedDF, doGen, resonance, era, subEra) #prescale for MC
+    
     # create the binning structure
     fitVariable = config.fitVariable()
     binningSet = set([fitVariable])
@@ -117,7 +120,8 @@ def run_flattening(spark, particle, probe, resonance, era, subEra,
     # they are binned in the ID, bin variables, and fit variable
     yields = {}
     yields_gen = {}
-
+    binnedDF = binnedDF.withColumn('weight',binnedDF['weight']*binnedDF['prescale_weight'])
+    binnedDF = binnedDF.withColumn('weight2', F.col('weight') * F.col('weight')) #prescale weight applied to weight column
     for numLabel, denLabel in efficiencies:
         den = binnedDF.filter(denLabel)
         for binVars in binVariables:
@@ -140,6 +144,7 @@ def run_flattening(spark, particle, probe, resonance, era, subEra,
         # includes underflow and overflow in the ROOT numbering scheme
         # (0 is underflow, len(binning)+1 is overflow)
         values = pd.Series(np.zeros(len(binning['mass'])+1))
+        #values[df.index] = df['sum(weight)']*df['sum(prescale_weight)']
         values[df.index] = df['sum(weight)']
         values = values.to_numpy()
         sumw2 = pd.Series(np.zeros(len(binning['mass'])+1))
