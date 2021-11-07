@@ -2,7 +2,7 @@
     "efficiencies": [
         ["SoftID", "genTracks"]
     ],
-    "selection": "tag_pt > 8 and tag_abseta < 2.4 and tag_isTight == 1 and (tag_hltL3fLMu7p5TrackL3Filtered7p5 == 1 and tag_hltMu7p5Track2JpsiTrackMassFiltered == 1) and (probe_hltMu7p5Track2JpsiTrackMassFiltered == 1) and probe_pt>2 and probe_abseta < 2.4 and pair_dR > 0.1",
+    "selection": "tag_pt > 8 and tag_abseta < 2.4 and tag_isTight == 1 and HLT_Mu7p5_Track2_Jpsi_v == 1 and (tag_hltL3fLMu7p5TrackL3Filtered7p5 == 1 and tag_hltMu7p5Track2JpsiTrackMassFiltered == 1) and (probe_hltMu7p5Track2JpsiTrackMassFiltered == 1) and probe_pt>2 and probe_abseta < 2.4 and pair_dR >= 0.1",
     "definitions": {
         "genTracks": "((probe_pt > 2))",
         "TrackerMuons": "probe_isTracker == 1",
