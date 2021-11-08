@@ -286,7 +286,7 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
       probe_relIso04_new = probe_relIso04 - (tag_pt/probe_pt);
       if (probe_relIso04_new < 0) probe_relIso04_new=0;
       
-      if (tag_pt > 8 && abs(tag_eta) < 2.4 && tag_isTight == 1 && (tag_HLT_Mu8_v == 1 || tag_HLT_Mu17_v == 1 || tag_HLT_Mu20_v == 1) && abs(probe_eta) < 2.4 && probe_pt>5 && pair_dR >= 0.1 && abs(tag_dz)<0.5 && abs(probe_dz)<0.5 && (tag_relIso04_new<1))  {
+      if (tag_pt > 8 && abs(tag_eta) < 2.4 && tag_isTight == 1 && (tag_HLT_Mu8_v == 1 || tag_HLT_Mu17_v == 1 || tag_HLT_Mu20_v == 1) && abs(probe_eta) < 2.4 && probe_pt>5 && pair_dR >= 0.1 && abs(tag_dz)<0.5 && abs(probe_dz)<0.5 )  {
       //if (((tag_HLT_Mu7p5_Track2_Jpsi_v == 1) && (probe_HLT_Mu7p5_Track2_Jpsi_v == 1)) && ((tag_charge>0)&&(probe_charge<0))) {
         //sum_tag = tag_pfIso04_neutral + tag_pfIso04_photon - 0.5*tag_pfIso04_sumPU + abs(tag_pfIso04_neutral + tag_pfIso04_photon - 0.5*tag_pfIso04_sumPU);
         //sum_probe = probe_pfIso04_neutral + probe_pfIso04_photon - 0.5*probe_pfIso04_sumPU + abs(probe_pfIso04_neutral + probe_pfIso04_photon - 0.5*probe_pfIso04_sumPU);

@@ -3,7 +3,7 @@
         ["HLT_IsoMu27", "LooseID_Iso040"],
         ["HLT_IsoMu27", "TightID_Iso015"]
     ],
-    "selection": "tag_pt > 8 and tag_abseta < 2.4 and tag_isTight == 1 and (tag_HLT_Mu8_v == 1 or tag_HLT_Mu17_v == 1 or tag_HLT_Mu20_v == 1) and probe_abseta < 2.4 and pair_dR >= 0.1 and probe_pt>5 and abs(tag_dz)<0.5 and abs(probe_dz)<0.5 and probe_relIso04_new<1",
+    "selection": "tag_pt > 8 and tag_abseta < 2.4 and tag_isTight == 1 and (tag_HLT_Mu8_v == 1 or tag_HLT_Mu17_v == 1 or tag_HLT_Mu20_v == 1) and probe_abseta < 2.4 and pair_dR >= 0.1 and probe_pt>5 and abs(tag_dz)<0.5 and abs(probe_dz)<0.5",
     "definitions": {
         "genTracks": "((probe_pt > 2))",
         "TrackerMuons": "probe_isTracker == 1",
