@@ -63,13 +63,16 @@ def getEff(binName, fname, shift=None, cutAndCount=False, resonance='Z'):
         nP = hP.IntegralAndError(bin1, bin2, eP)
         nF = hF.IntegralAndError(bin1, bin2, eF)
         eff, err = computeEff(nP, nF, eP.value, eF.value)
+        #if ((eff==1.) and (nP==0.) and (nF==0.)):
+        #    eff=0.
+        #    err=0.
         tfile.Close()
         return eff, err
     except Exception as e:
         print('Exception for getEff', binName)
         print(e)
         # raise e
-        return 1., 0.
+        return 0., 0.
 
 
 def getDataEff(binName, fname, shift=None, cutAndCount=False, resonance='Z'):
@@ -112,7 +115,10 @@ def getDataEff(binName, fname, shift=None, cutAndCount=False, resonance='Z'):
             nF = fitF.getVal()
             eP = fitP.getError()
             eF = fitF.getError()
-
+            
+            if ((nP==0.5) and (eP==0.)): 
+                nP=0.
+            
             hP = tfile.Get('{}_Pass'.format(binName))
             hF = tfile.Get('{}_Fail'.format(binName))
             # hard code Z for now (same as in run_single_fit.py)
@@ -149,7 +155,7 @@ def getDataEff(binName, fname, shift=None, cutAndCount=False, resonance='Z'):
         print('Exception for getDataEff', binName)
         print(e)
         # raise e
-        return 1., 0.
+        return 0., 0.
 
 
 def getSF(binName, fname, shift=None, resonance='Z'):
@@ -794,7 +800,8 @@ def prepare(baseDir, particle, probe, resonance, era,
         if effType == 'trig':
             mg.GetYaxis().SetRangeUser(0.6, 1.20)
         else:
-            mg.GetYaxis().SetRangeUser(0.8, 1.10)
+            #mg.GetYaxis().SetRangeUser(0.8, 1.10)
+            mg.GetYaxis().SetRangeUser(0., 1.10)
         legend = ROOT.TLegend(0.5, 0.70, 0.92, 0.92)
         legend.SetTextFont(42)
         legend.SetBorderSize(0)
@@ -818,9 +825,10 @@ def prepare(baseDir, particle, probe, resonance, era,
             text.Draw()
 
         CMS_lumi.cmsText = 'CMS'
-        CMS_lumi.writeExtraText = True
+        CMS_lumi.writeExtraText = False
         CMS_lumi.extraText = 'Preliminary'
-        CMS_lumi.lumi_13TeV = "%0.1f fb^{-1}" % (lumi)
+        #CMS_lumi.lumi_13TeV = "%0.1f fb^{-1}" % (lumi)
+        CMS_lumi.lumi_13TeV = "Run2017B+C+D+E+F"
         CMS_lumi.CMS_lumi(canvas, 4, 11)
 
         canvas.Modified()

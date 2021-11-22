@@ -1,0 +1,12 @@
+executable = JobTemplate_old.sh
+arguments = $(ptr) $(n1) $(inc)
+
+transfer_input_files = all_in_one_v4_charmonium.C
+should_transfer_files = yes
+when_to_transfer_output = ON_EXIT
+
+error = error_$(ptr)_$(n1)_$(inc).txt
+output = out_$(ptr)_$(n1)_$(inc).txt
+log = log_$(ptr)_$(n1)_$(inc).txt
+
+queue ptr,n1,inc from params.txt
