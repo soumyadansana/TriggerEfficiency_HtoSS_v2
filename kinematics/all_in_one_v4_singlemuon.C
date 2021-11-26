@@ -5,14 +5,32 @@
 #include "TCanvas.h"
 #include "TEfficiency.h"
 #include "TStyle.h"
+#include "TMath.h"
+#include "TLorentzVector.h"
+// ROOT includes
+//#include "Math/VectorUtil.h"
 
-const char *file_loc[7]={"./MC/0000/output_%d.root","/eos/user/s/sdansana/TnP_ntuples/muon/JPsi/Run2017_UL/MINIAOD/SingleMuon/crab_TnP_ntuplizer_muon_JPsi_Run2017_UL_MINIAOD_Run2017B/210524_192759/0000/output_%d.root","/eos/user/s/sdansana/TnP_ntuples/muon/JPsi/Run2017_UL/MINIAOD/SingleMuon/crab_TnP_ntuplizer_muon_JPsi_Run2017_UL_MINIAOD_Run2017C/210918_213334/0000/output_%d.root","/eos/user/s/sdansana/TnP_ntuples/muon/JPsi/Run2017_UL/MINIAOD/SingleMuon/crab_TnP_ntuplizer_muon_JPsi_Run2017_UL_MINIAOD_Run2017D/210918_213657/0000/output_%d.root","/eos/user/s/sdansana/TnP_ntuples/muon/JPsi/Run2017_UL/MINIAOD/SingleMuon/crab_TnP_ntuplizer_muon_JPsi_Run2017_UL_MINIAOD_Run2017E/210918_213744/0000/output_%d.root","/eos/user/s/sdansana/TnP_ntuples/muon/JPsi/Run2017_UL/MINIAOD/SingleMuon/crab_TnP_ntuplizer_muon_JPsi_Run2017_UL_MINIAOD_Run2017F/210918_213831/0000/output_%d.root","./output_%d.root"};
+const char *file_loc[7]={"/eos/user/s/sdansana/TnP_ntuples/muon/JPsi/Run2017_UL/MINIAOD/JpsiToMuMu_JpsiPt8_TuneCP5_13TeV-pythia8/crab_TnP_ntuplizer_muon_JPsi_Run2017_UL_MINIAOD_Jpsi/210523_221530/0000/output_%d.root","/eos/user/s/sdansana/TnP_ntuples/muon/JPsi/Run2017_UL/MINIAOD/SingleMuon/crab_TnP_ntuplizer_muon_JPsi_Run2017_UL_MINIAOD_Run2017B/210524_192759/0000/output_%d.root","/eos/user/s/sdansana/TnP_ntuples/muon/JPsi/Run2017_UL/MINIAOD/SingleMuon/crab_TnP_ntuplizer_muon_JPsi_Run2017_UL_MINIAOD_Run2017C/210918_213334/0000/output_%d.root","/eos/user/s/sdansana/TnP_ntuples/muon/JPsi/Run2017_UL/MINIAOD/SingleMuon/crab_TnP_ntuplizer_muon_JPsi_Run2017_UL_MINIAOD_Run2017D/210918_213657/0000/output_%d.root","/eos/user/s/sdansana/TnP_ntuples/muon/JPsi/Run2017_UL/MINIAOD/SingleMuon/crab_TnP_ntuplizer_muon_JPsi_Run2017_UL_MINIAOD_Run2017E/210918_213744/0000/output_%d.root","/eos/user/s/sdansana/TnP_ntuples/muon/JPsi/Run2017_UL/MINIAOD/SingleMuon/crab_TnP_ntuplizer_muon_JPsi_Run2017_UL_MINIAOD_Run2017F/210918_213831/0000/output_%d.root","./output_%d.root"};
 const char *era[7]={"MC","B","C","D","E","F","test"};
 const int n1_ini[7]={1,1,1,1,1,1,1};
 const int n2_fin[7]={490,244,519,271,439,585,100};
+
+//const char *cent[3]={"HT100-200","HT200-400","HT400-600"};
+const float cs[1]={874800.0};// pb unit
+const float L_int[3]={2.629170,70.672694,573.939406};//2017_UL HLT_Mu20_v in pb-1
 //const int ptr = 1;
 
-void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
+const char *type[2]={"LooseID_Iso040", "TightID_Iso015"};
+
+const float pt_bins[9]={5, 10, 15, 20, 25, 30, 40, 60, 100};
+
+Double_t dR(TLorentzVector *v1, TLorentzVector *v2) {
+  Double_t deta = v1->Eta()-v2->Eta();
+  Double_t dphi = TVector2::Phi_mpi_pi(v1->Phi()-v2->Phi());
+  return TMath::Sqrt(deta*deta+dphi*dphi);
+}
+
+void hist_gen(int ptr=1,int n1=1, int n2=600) {
 
   gStyle->SetPadTopMargin(0.08);
   gStyle->SetPadBottomMargin(0.12);
@@ -43,6 +61,15 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
   float probe_eta;
   float probe_phi;
   int probe_charge;
+	
+	
+  float tag_dxy;
+  float tag_Lxy;
+  float probe_Lxy;
+  float tag_dz;
+  float probe_dxy;
+  float probe_dz;
+	
   float sum_tag, sum_probe;
   float tag_pfIso;
   float probe_pfIso;  
@@ -58,14 +85,16 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
   float pv_y;
   float pv_z;
   float genmu1_pt;
+  float genmu1_eta;
+  float genmu1_phi;
   float genmu2_pt;
+  float genmu2_eta;
+  float genmu2_phi;
   int pair_rank;
   float tag_relIso04;
   float probe_relIso04;
   float tag_relIso04_new;//defined by subtracting pT of other leg
   float probe_relIso04_new;
-  float tag_dz;
-  float probe_dz;
 	int nVertices;
 	int nPUInteractions;
   
@@ -86,6 +115,12 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
   bool probe_isMedium;
   bool probe_isLoose;
   bool probe_isMuMatched;
+  bool probe_PFIsoLoose;
+  bool probe_PFIsoTight;
+  
+  float h_wt;
+  int flag; // to keep track of which trigger is fired
+  double nevts=0;
   
   
   TH1F* h_HLT_singlemu_trig = new TH1F("h_HLT_singlemu_trig", "HLT_singlemu_trig", 2, -0.5, 1.5);
@@ -149,6 +184,16 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
   
   TH1F* h_tag_relIso04_Pass = new TH1F("h_tag_relIso04_Pass", "tag_relIso04_Pass", 100, 0., 10.);
   TH1F* h_probe_relIso04_Pass = new TH1F("h_probe_relIso04_Pass", "probe_relIso04_Pass", 100, 0., 10.);
+	
+	TH1F* h_tag_dxy = new TH1F("h_tag_dxy", "tag_dxy", 500, -3.0, 3.0);
+  TH1F* h_probe_dxy = new TH1F("h_probe_dxy", "probe_dxy", 500, -3.0, 3.0);
+  TH1F* h_tag_dxy_Pass = new TH1F("h_tag_dxy_Pass", "tag_dxy_Pass", 500, -3.0, 3.0);
+  TH1F* h_probe_dxy_Pass = new TH1F("h_probe_dxy_Pass", "probe_dxy_Pass", 500, -3.0, 3.0);
+  
+  TH1F* h_tag_Lxy = new TH1F("h_tag_Lxy", "tag_Lxy", 500, -3.0, 3.0);
+  TH1F* h_probe_Lxy = new TH1F("h_probe_Lxy", "probe_Lxy", 500, -3.0, 3.0);
+  TH1F* h_tag_Lxy_Pass = new TH1F("h_tag_Lxy_Pass", "tag_Lxy_Pass", 500, -3.0, 3.0);
+  TH1F* h_probe_Lxy_Pass = new TH1F("h_probe_Lxy_Pass", "probe_Lxy_Pass", 500, -3.0, 3.0);
   
   TH2F* h_tag_pt_pair_dR = new TH2F("h_tag_pt_pair_dR", "tag_pt_pair_dR", 500, 0.0, 500.0, 100, 0., 1.);
   TH2F* h_probe_pt_pair_dR = new TH2F("h_probe_pt_pair_dR", "probe_pt_pair_dR", 500, 0.0, 500.0, 100, 0., 1.);
@@ -193,9 +238,26 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
   TH2F* h_probe_relIso04_tag_relIso04_new_Pass = new TH2F("h_probe_relIso04_tag_relIso04_new_Pass", "probe_relIso04_tag_relIso04_new_Pass", 100, 0.0, 10.0, 100, 0., 10.);
   TH2F* h_probe_relIso04_tag_relIso04_new = new TH2F("h_probe_relIso04_tag_relIso04_new", "probe_relIso04_tag_relIso04_new", 100, 0.0, 10.0, 100, 0., 10.);
   
+  int flag_t = 0; //LooseID Loose Iso
+  TH1F *h_mass_dist[8][2];
+  const char *PorF[2]={"Fail", "Pass"};
+  vector<float> PU_jets;
+  for (int j=0;j<2;j++) {
+    for (int k=0;k<9-1;k++) {
+      string title1 = "NUM_HLT_IsoMu27_DEN_%s_abseta_1_pt_%d_%s";
+      h_mass_dist[k][j] = new TH1F(Form(title1.c_str(),type[flag_t],(k+1),PorF[j]),Form(title1.c_str(),type[flag_t],(k+1),PorF[j]),60,2.8,3.4);//mass_hists
+    }
+  }
   //do {
+  nevts=1.23753e+08; // From other program, EventCount
+  
   if (n1<=n1_ini[ptr]) n1=n1_ini[ptr];
   if (n2>=n2_fin[ptr]) n2=n2_fin[ptr];
+  
+  TFile *f=TFile::Open("./prescale/mc/Run2017_UL.root");
+  TH1F* h_prescale=(TH1F*) f->Get("prescale");
+  h_prescale->SetDirectory(0);
+  
   for (int k=n1;k<=n2;k++) {
   
     if (gSystem->AccessPathName(Form(file_loc[ptr],k))) {
@@ -228,7 +290,11 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
     data->SetBranchAddress("pv_y",&pv_y);
     data->SetBranchAddress("pv_z",&pv_z);
     data->SetBranchAddress("genmu1_pt",&genmu1_pt);
+    data->SetBranchAddress("genmu1_eta",&genmu1_eta);
+    data->SetBranchAddress("genmu1_phi",&genmu1_phi);
     data->SetBranchAddress("genmu2_pt",&genmu2_pt);
+    data->SetBranchAddress("genmu2_eta",&genmu2_eta);
+    data->SetBranchAddress("genmu2_phi",&genmu2_phi);
     
     data->SetBranchAddress("tag_pt",&tag_pt);
     data->SetBranchAddress("tag_eta",&tag_eta);
@@ -242,6 +308,8 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
     data->SetBranchAddress("probe_isTight",&probe_isTight);
     data->SetBranchAddress("probe_isMedium",&probe_isMedium);
     data->SetBranchAddress("probe_isLoose",&probe_isLoose);
+    data->SetBranchAddress("probe_PFIsoLoose",&probe_PFIsoLoose);
+    data->SetBranchAddress("probe_PFIsoTight",&probe_PFIsoTight);
     data->SetBranchAddress("tag_HLT_Mu8_v",&tag_HLT_Mu8_v);
     data->SetBranchAddress("tag_HLT_Mu17_v",&tag_HLT_Mu17_v);
     data->SetBranchAddress("tag_HLT_Mu20_v",&tag_HLT_Mu20_v);
@@ -250,6 +318,9 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
     data->SetBranchAddress("probe_HLT_Mu8_v",&probe_HLT_Mu8_v);
     data->SetBranchAddress("probe_HLT_Mu17_v",&probe_HLT_Mu17_v);
     data->SetBranchAddress("probe_HLT_Mu20_v",&probe_HLT_Mu20_v);
+		
+    data->SetBranchAddress("tag_dxy",&tag_dxy);
+    data->SetBranchAddress("probe_dxy",&probe_dxy);
     
     data->SetBranchAddress("tag_pfIso04_charged",&tag_pfIso04_charged);
     data->SetBranchAddress("tag_pfIso04_neutral",&tag_pfIso04_neutral);
@@ -275,134 +346,188 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
     data->SetBranchAddress("probe_dz",&probe_dz);
     
     Int_t nentries=(Int_t)data->GetEntries();
+    //nevts+=nentries;
     for (Int_t i=0;i<nentries;i++) {
 		  data->GetEntry(i);
 		  //h_HLT_Mu8_v->Fill(HLT_Mu8_v);
 		  h_HLT_singlemu_trig->Fill((HLT_Mu8_v == 1) || (HLT_Mu17_v == 1) || (HLT_Mu20_v == 1));
 		  // tag_charge > 0, probe_charge < 0
-
+		  
       tag_relIso04_new = tag_relIso04 - (probe_pt/tag_pt);
       if (tag_relIso04_new < 0) tag_relIso04_new=0;
       probe_relIso04_new = probe_relIso04 - (tag_pt/probe_pt);
       if (probe_relIso04_new < 0) probe_relIso04_new=0;
       
-      if (tag_pt > 8 && abs(tag_eta) < 2.4 && tag_isTight == 1 && (tag_HLT_Mu8_v == 1 || tag_HLT_Mu17_v == 1 || tag_HLT_Mu20_v == 1) && abs(probe_eta) < 2.4 && probe_pt>5 && pair_dR >= 0.1 && abs(tag_dz)<0.5 && abs(probe_dz)<0.5 )  {
+      if (tag_pt > 8 && abs(tag_eta) < 2.4 && tag_isTight == 1 && (tag_HLT_Mu8_v == 1 || tag_HLT_Mu17_v == 1 || tag_HLT_Mu20_v == 1) && abs(probe_eta) < 2.4 && probe_pt>5 && pair_dR >= 0.1 && abs(tag_dz)<0.5 && abs(probe_dz)<0.5 && probe_isTight==1 && probe_PFIsoTight==1)  {
       //if (((tag_HLT_Mu7p5_Track2_Jpsi_v == 1) && (probe_HLT_Mu7p5_Track2_Jpsi_v == 1)) && ((tag_charge>0)&&(probe_charge<0))) {
         //sum_tag = tag_pfIso04_neutral + tag_pfIso04_photon - 0.5*tag_pfIso04_sumPU + abs(tag_pfIso04_neutral + tag_pfIso04_photon - 0.5*tag_pfIso04_sumPU);
         //sum_probe = probe_pfIso04_neutral + probe_pfIso04_photon - 0.5*probe_pfIso04_sumPU + abs(probe_pfIso04_neutral + probe_pfIso04_photon - 0.5*probe_pfIso04_sumPU);
+        
+        if (tag_HLT_Mu8_v==1) flag=0;
+        if (tag_HLT_Mu17_v==1) flag=1;
+        if (tag_HLT_Mu20_v==1) flag=2;
+        
+        h_wt=h_prescale->GetBinContent((int)TMath::Floor(tag_pt));
+        //h_wt=(cs[0]*L_int[flag])/nevts; //no. of entries will be divided after the whole histogram is made
+        //cout<<h_wt<<endl;
+        //h_wt=1;
         tag_pfIso = (tag_pfIso04_charged + std::max(0., tag_pfIso04_neutral + tag_pfIso04_photon - 0.5*tag_pfIso04_sumPU))/tag_pt;
         probe_pfIso = (probe_pfIso04_charged + std::max(0., probe_pfIso04_neutral + probe_pfIso04_photon - 0.5*probe_pfIso04_sumPU))/probe_pt;
         
-				h_probe_pfIso_tag_pfIso->Fill(probe_pfIso,tag_pfIso);
-				h_tag_pfIso04_charged->Fill(tag_pfIso04_charged);
-				h_probe_pfIso04_charged->Fill(probe_pfIso04_charged);
-				h_tag_pfIso04_charged_nVertices->Fill(tag_pfIso04_charged,nVertices);
-				h_tag_pfIso04_charged_nPUInteractions->Fill(tag_pfIso04_charged,nPUInteractions);
-				h_tag_pfIso04_charged_pv_z->Fill(tag_pfIso04_charged,pv_z);
+				h_probe_pfIso_tag_pfIso->Fill(probe_pfIso,tag_pfIso,h_wt);
+				h_tag_pfIso04_charged->Fill(tag_pfIso04_charged,h_wt);
+				h_probe_pfIso04_charged->Fill(probe_pfIso04_charged,h_wt);
+				h_tag_pfIso04_charged_nVertices->Fill(tag_pfIso04_charged,nVertices,h_wt);
+				h_tag_pfIso04_charged_nPUInteractions->Fill(tag_pfIso04_charged,nPUInteractions,h_wt);
+				h_tag_pfIso04_charged_pv_z->Fill(tag_pfIso04_charged,pv_z,h_wt);
 
 				
-	h_HLT_IsoMu27_v->Fill(HLT_IsoMu27_v);
-        h_tag_charge->Fill(tag_charge);
-        h_probe_charge->Fill(probe_charge);
+	      h_HLT_IsoMu27_v->Fill(HLT_IsoMu27_v,h_wt);
+        h_tag_charge->Fill(tag_charge,h_wt);
+        h_probe_charge->Fill(probe_charge,h_wt);
         //cout<<"probe_charge-"<<probe_charge<<endl;
         
-        h_tag_HLT_IsoMu27_v->Fill(tag_HLT_IsoMu27_v);
-        h_tag_isTight->Fill(tag_isTight);
-        h_tag_pt->Fill(tag_pt);
-        h_tag_eta->Fill(tag_eta);
-        h_tag_phi->Fill(tag_phi);
-        h_tag_pfIso->Fill(tag_pfIso);
-        h_probe_HLT_IsoMu27_v->Fill(probe_HLT_IsoMu27_v);
-        h_probe_isTight->Fill(probe_isTight);
-        h_probe_isMedium->Fill(probe_isMedium);
-        h_probe_isLoose->Fill(probe_isLoose);
-        h_probe_pt->Fill(probe_pt);
-        h_probe_eta->Fill(probe_eta);
-        h_probe_phi->Fill(probe_phi);
-        h_probe_pfIso->Fill(probe_pfIso);
+        h_tag_HLT_IsoMu27_v->Fill(tag_HLT_IsoMu27_v,h_wt);
+        h_tag_isTight->Fill(tag_isTight,h_wt);
+        h_tag_pt->Fill(tag_pt,h_wt);
+        h_tag_eta->Fill(tag_eta,h_wt);
+        h_tag_phi->Fill(tag_phi,h_wt);
+        h_tag_pfIso->Fill(tag_pfIso,h_wt);
+        h_probe_HLT_IsoMu27_v->Fill(probe_HLT_IsoMu27_v,h_wt);
+        h_probe_isTight->Fill(probe_isTight,h_wt);
+        h_probe_isMedium->Fill(probe_isMedium,h_wt);
+        h_probe_isLoose->Fill(probe_isLoose,h_wt);
+        h_probe_pt->Fill(probe_pt,h_wt);
+        h_probe_eta->Fill(probe_eta,h_wt);
+        h_probe_phi->Fill(probe_phi,h_wt);
+        h_probe_pfIso->Fill(probe_pfIso,h_wt);
         
-        h_pair_mass->Fill(pair_mass);
-        h_pair_pt->Fill(pair_pt);
-        h_pair_eta->Fill(pair_eta);
-        h_pair_phi->Fill(pair_phi);
-        h_pair_dR->Fill(pair_dR);
+        h_pair_mass->Fill(pair_mass,h_wt);
+        h_pair_pt->Fill(pair_pt,h_wt);
+        h_pair_eta->Fill(pair_eta,h_wt);
+        h_pair_phi->Fill(pair_phi,h_wt);
+        h_pair_dR->Fill(pair_dR,h_wt);
         
-        h_genmu1_pt->Fill(genmu1_pt);
-        h_genmu2_pt->Fill(genmu2_pt);
+        h_genmu1_pt->Fill(genmu1_pt,h_wt);
+        h_genmu2_pt->Fill(genmu2_pt,h_wt);
 
-        h_probe_isMuMatched->Fill(probe_isMuMatched);
+        h_probe_isMuMatched->Fill(probe_isMuMatched,h_wt);
       
-        h_tag_pt_pair_dR->Fill(tag_pt, pair_dR);
-        h_probe_pt_pair_dR->Fill(probe_pt, pair_dR);  
-        h_tag_pt_probe_pt->Fill(tag_pt,probe_pt);    
+        h_tag_pt_pair_dR->Fill(tag_pt, pair_dR,h_wt);
+        h_probe_pt_pair_dR->Fill(probe_pt, pair_dR,h_wt);  
+        h_tag_pt_probe_pt->Fill(tag_pt,probe_pt,h_wt);    
         
-        h_pv_z->Fill(pv_z);
-        h_pv_x->Fill(pv_x);
-        h_pv_y->Fill(pv_y);
+        h_pv_z->Fill(pv_z,h_wt);
+        h_pv_x->Fill(pv_x,h_wt);
+        h_pv_y->Fill(pv_y,h_wt);
         
-        h_tag_relIso04->Fill(tag_relIso04);
-        h_probe_relIso04->Fill(probe_relIso04);
+        h_tag_relIso04->Fill(tag_relIso04,h_wt);
+        h_probe_relIso04->Fill(probe_relIso04,h_wt);
         
-        h_probe_HLT_singlemu_trig->Fill((probe_HLT_Mu8_v == 1) || (probe_HLT_Mu17_v == 1) || (probe_HLT_Mu20_v == 1));
+        h_probe_HLT_singlemu_trig->Fill((probe_HLT_Mu8_v == 1) || (probe_HLT_Mu17_v == 1) || (probe_HLT_Mu20_v == 1),h_wt);
         
-        h_tag_pt_tag_relIso04->Fill(tag_pt, tag_relIso04);
-        h_tag_pt_probe_relIso04->Fill(tag_pt, probe_relIso04);
-        h_probe_pt_tag_relIso04->Fill(probe_pt, tag_relIso04);
-        h_probe_pt_probe_relIso04->Fill(probe_pt, probe_relIso04);
-        h_dR_tag_relIso04->Fill(pair_dR, tag_relIso04);
-        h_dR_probe_relIso04->Fill(pair_dR, probe_relIso04);
-        h_probe_relIso04_tag_relIso04->Fill(probe_relIso04,tag_relIso04);
+        h_tag_pt_tag_relIso04->Fill(tag_pt, tag_relIso04,h_wt);
+        h_tag_pt_probe_relIso04->Fill(tag_pt, probe_relIso04,h_wt);
+        h_probe_pt_tag_relIso04->Fill(probe_pt, tag_relIso04,h_wt);
+        h_probe_pt_probe_relIso04->Fill(probe_pt, probe_relIso04,h_wt);
+        h_dR_tag_relIso04->Fill(pair_dR, tag_relIso04,h_wt);
+        h_dR_probe_relIso04->Fill(pair_dR, probe_relIso04,h_wt);
+        h_probe_relIso04_tag_relIso04->Fill(probe_relIso04,tag_relIso04,h_wt);
         
         
-        h_tag_relIso04_new->Fill(tag_relIso04_new);
-        h_probe_relIso04_new->Fill(probe_relIso04_new);
+        h_tag_relIso04_new->Fill(tag_relIso04_new,h_wt);
+        h_probe_relIso04_new->Fill(probe_relIso04_new,h_wt);
         
-        h_tag_pt_tag_relIso04_new->Fill(tag_pt, tag_relIso04_new);
-        h_tag_pt_probe_relIso04_new->Fill(tag_pt, probe_relIso04_new);
-        h_probe_pt_tag_relIso04_new->Fill(probe_pt, tag_relIso04_new);
-        h_probe_pt_probe_relIso04_new->Fill(probe_pt, probe_relIso04_new);
-        h_dR_tag_relIso04_new->Fill(pair_dR, tag_relIso04_new);
-        h_dR_probe_relIso04_new->Fill(pair_dR, probe_relIso04_new);
-        h_probe_relIso04_tag_relIso04_new->Fill(probe_relIso04_new,tag_relIso04_new);
+        h_tag_pt_tag_relIso04_new->Fill(tag_pt, tag_relIso04_new,h_wt);
+        h_tag_pt_probe_relIso04_new->Fill(tag_pt, probe_relIso04_new,h_wt);
+        h_probe_pt_tag_relIso04_new->Fill(probe_pt, tag_relIso04_new,h_wt);
+        h_probe_pt_probe_relIso04_new->Fill(probe_pt, probe_relIso04_new,h_wt);
+        h_dR_tag_relIso04_new->Fill(pair_dR, tag_relIso04_new,h_wt);
+        h_dR_probe_relIso04_new->Fill(pair_dR, probe_relIso04_new,h_wt);
+        h_probe_relIso04_tag_relIso04_new->Fill(probe_relIso04_new,tag_relIso04_new,h_wt);
         
+				tag_Lxy=(tag_dxy*pair_mass)/tag_pt;
+        probe_Lxy=(probe_dxy*pair_mass)/probe_pt;
+        h_tag_dxy->Fill(tag_dxy);
+        h_probe_dxy->Fill(probe_dxy);
+        h_tag_Lxy->Fill(tag_Lxy);
+        h_probe_Lxy->Fill(probe_Lxy);
+        
+        h_pair_absdz->Fill(abs(pair_dz),h_wt);
         if (probe_HLT_IsoMu27_v == 1) {
-          h_pair_dR_Pass->Fill(pair_dR);
-          h_pv_z_Pass->Fill(pv_z);
-          h_tag_pt_Pass->Fill(tag_pt);
-          h_tag_eta_Pass->Fill(tag_eta);
-          h_probe_pt_Pass->Fill(probe_pt);
-          h_probe_eta_Pass->Fill(probe_eta);
-          h_pair_mass_Pass->Fill(pair_mass);
-          h_probe_isMuMatched_Pass->Fill(probe_isMuMatched);
-          h_tag_pt_pair_dR_Pass->Fill(tag_pt, pair_dR);
-          h_probe_pt_pair_dR_Pass->Fill(probe_pt, pair_dR);
-          h_tag_pt_probe_pt_Pass->Fill(tag_pt,probe_pt);    
+          h_pair_dR_Pass->Fill(pair_dR,h_wt);
+          h_pv_z_Pass->Fill(pv_z,h_wt);
+          h_tag_pt_Pass->Fill(tag_pt,h_wt);
+          h_tag_eta_Pass->Fill(tag_eta,h_wt);
+          h_probe_pt_Pass->Fill(probe_pt,h_wt);
+          h_probe_eta_Pass->Fill(probe_eta,h_wt);
+          h_pair_mass_Pass->Fill(pair_mass,h_wt);
+          h_probe_isMuMatched_Pass->Fill(probe_isMuMatched,h_wt);
+          h_tag_pt_pair_dR_Pass->Fill(tag_pt, pair_dR,h_wt);
+          h_probe_pt_pair_dR_Pass->Fill(probe_pt, pair_dR,h_wt);
+          h_tag_pt_probe_pt_Pass->Fill(tag_pt,probe_pt,h_wt);    
           
-          h_probe_relIso04_Pass->Fill(probe_relIso04);
-          h_tag_relIso04_Pass->Fill(tag_relIso04);
+          h_probe_relIso04_Pass->Fill(probe_relIso04,h_wt);
+          h_tag_relIso04_Pass->Fill(tag_relIso04,h_wt);
           
-          h_tag_pt_tag_relIso04_Pass->Fill(tag_pt, tag_relIso04);
-          h_tag_pt_probe_relIso04_Pass->Fill(tag_pt, probe_relIso04);
-          h_probe_pt_tag_relIso04_Pass->Fill(probe_pt, tag_relIso04);
-          h_probe_pt_probe_relIso04_Pass->Fill(probe_pt, probe_relIso04);
-          h_dR_tag_relIso04_Pass->Fill(pair_dR, tag_relIso04);
-          h_dR_probe_relIso04_Pass->Fill(pair_dR, probe_relIso04);
-          h_probe_relIso04_tag_relIso04_Pass->Fill(probe_relIso04_new,tag_relIso04);
+          h_tag_pt_tag_relIso04_Pass->Fill(tag_pt, tag_relIso04,h_wt);
+          h_tag_pt_probe_relIso04_Pass->Fill(tag_pt, probe_relIso04,h_wt);
+          h_probe_pt_tag_relIso04_Pass->Fill(probe_pt, tag_relIso04,h_wt);
+          h_probe_pt_probe_relIso04_Pass->Fill(probe_pt, probe_relIso04,h_wt);
+          h_dR_tag_relIso04_Pass->Fill(pair_dR, tag_relIso04,h_wt);
+          h_dR_probe_relIso04_Pass->Fill(pair_dR, probe_relIso04,h_wt);
+          h_probe_relIso04_tag_relIso04_Pass->Fill(probe_relIso04_new,tag_relIso04,h_wt);
           
-          h_probe_relIso04_new_Pass->Fill(probe_relIso04_new);
-          h_tag_relIso04_new_Pass->Fill(tag_relIso04_new);
+          h_probe_relIso04_new_Pass->Fill(probe_relIso04_new,h_wt);
+          h_tag_relIso04_new_Pass->Fill(tag_relIso04_new,h_wt);
           
-          h_tag_pt_tag_relIso04_new_Pass->Fill(tag_pt, tag_relIso04_new);
-          h_tag_pt_probe_relIso04_new_Pass->Fill(tag_pt, probe_relIso04_new);
-          h_probe_pt_tag_relIso04_new_Pass->Fill(probe_pt, tag_relIso04_new);
-          h_probe_pt_probe_relIso04_new_Pass->Fill(probe_pt, probe_relIso04_new);
-          h_dR_tag_relIso04_new_Pass->Fill(pair_dR, tag_relIso04_new);
-          h_dR_probe_relIso04_new_Pass->Fill(pair_dR, probe_relIso04_new);
-          h_probe_relIso04_tag_relIso04_new_Pass->Fill(probe_relIso04_new,tag_relIso04_new);
-        
+          h_tag_pt_tag_relIso04_new_Pass->Fill(tag_pt, tag_relIso04_new,h_wt);
+          h_tag_pt_probe_relIso04_new_Pass->Fill(tag_pt, probe_relIso04_new,h_wt);
+          h_probe_pt_tag_relIso04_new_Pass->Fill(probe_pt, tag_relIso04_new,h_wt);
+          h_probe_pt_probe_relIso04_new_Pass->Fill(probe_pt, probe_relIso04_new,h_wt);
+          h_dR_tag_relIso04_new_Pass->Fill(pair_dR, tag_relIso04_new,h_wt);
+          h_dR_probe_relIso04_new_Pass->Fill(pair_dR, probe_relIso04_new,h_wt);
+          h_probe_relIso04_tag_relIso04_new_Pass->Fill(probe_relIso04_new,tag_relIso04_new,h_wt);
+					
+					
+          h_tag_dxy_Pass->Fill(tag_dxy);
+          h_probe_dxy_Pass->Fill(probe_dxy);
+          h_tag_Lxy_Pass->Fill(tag_Lxy);
+          h_probe_Lxy_Pass->Fill(probe_Lxy);
+          
           
         }
-        h_pair_absdz->Fill(abs(pair_dz));
+        //Below has been done to just generate mass dists without additional restraint
+        /*for (int t=0;t<9-1;t++) {
+            if (probe_pt<pt_bins[t+1] && probe_pt>pt_bins[t]) {
+              h_mass_dist[t][probe_HLT_IsoMu27_v]->Fill(pair_mass,h_wt);
+              break;
+            }
+          }*/
+        //add only gen_matched criteria
+        Double_t mu_mass=0.105;
+        Double_t dR_max=0.03;
+        TLorentzVector* genmu1 = new TLorentzVector(0., 0., 0., 0.);
+        genmu1->SetPtEtaPhiM(genmu1_pt, genmu1_eta, genmu1_phi, mu_mass);
+        TLorentzVector* genmu2 = new TLorentzVector(0., 0., 0., 0.);
+        genmu2->SetPtEtaPhiM(genmu2_pt, genmu2_eta, genmu2_phi, mu_mass);
+        TLorentzVector* probe_mu = new TLorentzVector(0., 0., 0., 0.);
+        probe_mu->SetPtEtaPhiM(probe_pt, probe_eta, probe_phi, mu_mass);
+        TLorentzVector* tag_mu = new TLorentzVector(0., 0., 0., 0.);
+        tag_mu->SetPtEtaPhiM(tag_pt, tag_eta, tag_phi, mu_mass);
+        
+        Double_t dR_probe_genmu1 = dR(probe_mu, genmu1);
+        Double_t dR_probe_genmu2 = dR(probe_mu, genmu2);
+        
+        if ((dR_probe_genmu1>dR_max) && (dR_probe_genmu2>dR_max)) continue; //start by checking gen-matched probes, do tag later
+        
+        for (int t=0;t<9-1;t++) {
+            if (probe_pt<pt_bins[t+1] && probe_pt>pt_bins[t]) {
+              h_mass_dist[t][probe_HLT_IsoMu27_v]->Fill(pair_mass,h_wt);
+              //h_mass_dist[t][0]->Fill(pair_mass);
+              break;
+            }
+          }
       }
     }
     f_in->Close();
@@ -418,7 +543,12 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
   
   
   //h_pt_denom1->Draw();
-  TFile* out_file = new TFile(Form("hists_secondset_2017%s_UL_[%d-%d]_filter_matching_singlemuon.root",era[ptr-1],n1,n2),"Recreate");
+  TFile* out_file = new TFile(Form("hists_secondset_2017%s_UL_[%d-%d]_filter_matching_singlemuon_scaled_new.root",era[ptr-1],n1,n2),"Recreate");
+	
+	cout<<nevts<<endl;
+	//nevts=100;
+	
+	//////////////////////////////////////
 	
   h_HLT_IsoMu27_v->Write();
   h_tag_HLT_IsoMu27_v->Write();
@@ -524,9 +654,24 @@ void all_in_one_v4_singlemuon(int ptr=1,int n1=1, int n2=600) {
 	h_tag_pfIso04_charged_nPUInteractions->Write();
 	h_tag_pfIso04_charged_pv_z->Write();
 	
-        
-  
+	h_tag_dxy->Write();
+  h_probe_dxy->Write();
+  h_tag_Lxy->Write();
+  h_probe_Lxy->Write();
+	h_tag_dxy_Pass->Write();
+  h_probe_dxy_Pass->Write();
+  h_tag_Lxy_Pass->Write();
+  h_probe_Lxy_Pass->Write();
+	
   out_file->Close();
           
-  return;
+      
+  TFile *flat_file=new TFile(Form("NUM_HLT_IsoMu27_DEN_%s_abseta_pt_genMatched_[%d-%d].root",type[flag_t],n1,n2), "Recreate");
+    for (int k=0;k<9-1;k++) {
+      for (int j=0;j<2;j++) {
+        h_mass_dist[k][j]->Write();
+    }
+  }
+  flat_file->Close();
+  return 0;
 }
