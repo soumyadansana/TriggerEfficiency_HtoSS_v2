@@ -1,7 +1,7 @@
 executable = JobTemplate_old.sh
 arguments = $(ptr) $(n1) $(inc)
 
-transfer_input_files = all_in_one_v4_singlemuon.C
+transfer_input_files = ./prescale,all_in_one_v4_singlemuon.C
 should_transfer_files = yes
 when_to_transfer_output = ON_EXIT
 

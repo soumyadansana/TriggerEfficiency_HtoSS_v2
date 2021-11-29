@@ -185,15 +185,15 @@ void hist_gen(int ptr=1,int n1=1, int n2=600) {
   TH1F* h_tag_relIso04_Pass = new TH1F("h_tag_relIso04_Pass", "tag_relIso04_Pass", 100, 0., 10.);
   TH1F* h_probe_relIso04_Pass = new TH1F("h_probe_relIso04_Pass", "probe_relIso04_Pass", 100, 0., 10.);
 	
-	TH1F* h_tag_dxy = new TH1F("h_tag_dxy", "tag_dxy", 500, -3.0, 3.0);
-  TH1F* h_probe_dxy = new TH1F("h_probe_dxy", "probe_dxy", 500, -3.0, 3.0);
-  TH1F* h_tag_dxy_Pass = new TH1F("h_tag_dxy_Pass", "tag_dxy_Pass", 500, -3.0, 3.0);
-  TH1F* h_probe_dxy_Pass = new TH1F("h_probe_dxy_Pass", "probe_dxy_Pass", 500, -3.0, 3.0);
+	TH1F* h_tag_dxy = new TH1F("h_tag_dxy", "tag_dxy", 1000, -0.5, 0.5);
+  TH1F* h_probe_dxy = new TH1F("h_probe_dxy", "probe_dxy", 1000, -0.5, 0.5);
+  TH1F* h_tag_dxy_Pass = new TH1F("h_tag_dxy_Pass", "tag_dxy_Pass", 1000, -0.5, 0.5);
+  TH1F* h_probe_dxy_Pass = new TH1F("h_probe_dxy_Pass", "probe_dxy_Pass", 1000, -0.5, 0.5);
   
-  TH1F* h_tag_Lxy = new TH1F("h_tag_Lxy", "tag_Lxy", 500, -3.0, 3.0);
-  TH1F* h_probe_Lxy = new TH1F("h_probe_Lxy", "probe_Lxy", 500, -3.0, 3.0);
-  TH1F* h_tag_Lxy_Pass = new TH1F("h_tag_Lxy_Pass", "tag_Lxy_Pass", 500, -3.0, 3.0);
-  TH1F* h_probe_Lxy_Pass = new TH1F("h_probe_Lxy_Pass", "probe_Lxy_Pass", 500, -3.0, 3.0);
+  TH1F* h_tag_Lxy = new TH1F("h_tag_Lxy", "tag_Lxy", 800, -0.5, 0.5);
+  TH1F* h_probe_Lxy = new TH1F("h_probe_Lxy", "probe_Lxy", 800, -0.5, 0.5);
+  TH1F* h_tag_Lxy_Pass = new TH1F("h_tag_Lxy_Pass", "tag_Lxy_Pass", 800, -0.5, 0.5);
+  TH1F* h_probe_Lxy_Pass = new TH1F("h_probe_Lxy_Pass", "probe_Lxy_Pass", 800, -0.5, 0.5);
   
   TH2F* h_tag_pt_pair_dR = new TH2F("h_tag_pt_pair_dR", "tag_pt_pair_dR", 500, 0.0, 500.0, 100, 0., 1.);
   TH2F* h_probe_pt_pair_dR = new TH2F("h_probe_pt_pair_dR", "probe_pt_pair_dR", 500, 0.0, 500.0, 100, 0., 1.);
@@ -358,7 +358,7 @@ void hist_gen(int ptr=1,int n1=1, int n2=600) {
       probe_relIso04_new = probe_relIso04 - (tag_pt/probe_pt);
       if (probe_relIso04_new < 0) probe_relIso04_new=0;
       
-      if (tag_pt > 8 && abs(tag_eta) < 2.4 && tag_isTight == 1 && (tag_HLT_Mu8_v == 1 || tag_HLT_Mu17_v == 1 || tag_HLT_Mu20_v == 1) && abs(probe_eta) < 2.4 && probe_pt>5 && pair_dR >= 0.1 && abs(tag_dz)<0.5 && abs(probe_dz)<0.5 && probe_isTight==1 && probe_PFIsoTight==1)  {
+      if (tag_pt > 8 && abs(tag_eta) < 2.4 && tag_isTight == 1 && (tag_HLT_Mu8_v == 1 || tag_HLT_Mu17_v == 1 || tag_HLT_Mu20_v == 1) && abs(probe_eta) < 2.4 && probe_pt>5 && pair_dR >= 0.1 && abs(tag_dz)<0.5 && abs(probe_dz)<0.5 && probe_isLoose==1 && probe_PFIsoLoose==1 && tag_relIso04_new<1.)  {
       //if (((tag_HLT_Mu7p5_Track2_Jpsi_v == 1) && (probe_HLT_Mu7p5_Track2_Jpsi_v == 1)) && ((tag_charge>0)&&(probe_charge<0))) {
         //sum_tag = tag_pfIso04_neutral + tag_pfIso04_photon - 0.5*tag_pfIso04_sumPU + abs(tag_pfIso04_neutral + tag_pfIso04_photon - 0.5*tag_pfIso04_sumPU);
         //sum_probe = probe_pfIso04_neutral + probe_pfIso04_photon - 0.5*probe_pfIso04_sumPU + abs(probe_pfIso04_neutral + probe_pfIso04_photon - 0.5*probe_pfIso04_sumPU);
@@ -666,7 +666,7 @@ void hist_gen(int ptr=1,int n1=1, int n2=600) {
   out_file->Close();
           
       
-  TFile *flat_file=new TFile(Form("NUM_HLT_IsoMu27_DEN_%s_abseta_pt_genMatched_[%d-%d].root",type[flag_t],n1,n2), "Recreate");
+  TFile *flat_file=new TFile(Form("NUM_HLT_IsoMu27_DEN_%s_abseta_pt_genMatched_[%d-%d]_2017%s.root",type[flag_t],n1,n2,era[ptr-1]), "Recreate");
     for (int k=0;k<9-1;k++) {
       for (int j=0;j<2;j++) {
         h_mass_dist[k][j]->Write();
