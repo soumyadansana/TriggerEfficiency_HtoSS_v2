@@ -367,7 +367,7 @@ void hist_gen(int ptr=1,int n1=1, int n2=600) {
         if (tag_HLT_Mu17_v==1) flag=1;
         if (tag_HLT_Mu20_v==1) flag=2;
         
-	if (ptr==0) h_wt=1;
+	if (ptr!=0) h_wt=1;
 	else h_wt=h_prescale->GetBinContent((int)TMath::Floor(tag_pt));
         //h_wt=(cs[0]*L_int[flag])/nevts; //no. of entries will be divided after the whole histogram is made
         //cout<<h_wt<<endl;
