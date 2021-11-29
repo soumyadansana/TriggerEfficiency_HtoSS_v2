@@ -449,10 +449,10 @@ void hist_gen(int ptr=1,int n1=1, int n2=600) {
         
 				tag_Lxy=(tag_dxy*pair_mass)/tag_pt;
         probe_Lxy=(probe_dxy*pair_mass)/probe_pt;
-        h_tag_dxy->Fill(tag_dxy);
-        h_probe_dxy->Fill(probe_dxy);
-        h_tag_Lxy->Fill(tag_Lxy);
-        h_probe_Lxy->Fill(probe_Lxy);
+        h_tag_dxy->Fill(tag_dxy,h_wt);
+        h_probe_dxy->Fill(probe_dxy,h_wt);
+        h_tag_Lxy->Fill(tag_Lxy,h_wt);
+        h_probe_Lxy->Fill(probe_Lxy,h_wt);
         
         h_pair_absdz->Fill(abs(pair_dz),h_wt);
         if (probe_HLT_IsoMu27_v == 1) {
@@ -491,10 +491,10 @@ void hist_gen(int ptr=1,int n1=1, int n2=600) {
           h_probe_relIso04_tag_relIso04_new_Pass->Fill(probe_relIso04_new,tag_relIso04_new,h_wt);
 					
 					
-          h_tag_dxy_Pass->Fill(tag_dxy);
-          h_probe_dxy_Pass->Fill(probe_dxy);
-          h_tag_Lxy_Pass->Fill(tag_Lxy);
-          h_probe_Lxy_Pass->Fill(probe_Lxy);
+          h_tag_dxy_Pass->Fill(tag_dxy,h_wt);
+          h_probe_dxy_Pass->Fill(probe_dxy,h_wt);
+          h_tag_Lxy_Pass->Fill(tag_Lxy,h_wt);
+          h_probe_Lxy_Pass->Fill(probe_Lxy,h_wt);
           
           
         }
