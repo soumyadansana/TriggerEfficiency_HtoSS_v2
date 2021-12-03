@@ -184,15 +184,15 @@ void hist_gen(int ptr=1,int n1=1, int n2=600) {
   TH1F* h_probe_relIso04_Pass = new TH1F("h_probe_relIso04_Pass", "probe_relIso04_Pass", 100, 0., 10.);
   
   
-  TH1F* h_tag_dxy = new TH1F("h_tag_dxy", "tag_dxy", 500, -3.0, 3.0);
-  TH1F* h_probe_dxy = new TH1F("h_probe_dxy", "probe_dxy", 500, -3.0, 3.0);
-  TH1F* h_tag_dxy_Pass = new TH1F("h_tag_dxy_Pass", "tag_dxy_Pass", 500, -3.0, 3.0);
-  TH1F* h_probe_dxy_Pass = new TH1F("h_probe_dxy_Pass", "probe_dxy_Pass", 500, -3.0, 3.0);
+  TH1F* h_tag_dxy = new TH1F("h_tag_dxy", "tag_dxy", 1000, -0.5, 0.5);
+  TH1F* h_probe_dxy = new TH1F("h_probe_dxy", "probe_dxy", 1000, -0.5, 0.5);
+  TH1F* h_tag_dxy_Pass = new TH1F("h_tag_dxy_Pass", "tag_dxy_Pass", 1000, -0.5, 0.5);
+  TH1F* h_probe_dxy_Pass = new TH1F("h_probe_dxy_Pass", "probe_dxy_Pass", 1000, -0.5, 0.5);
   
-  TH1F* h_tag_Lxy = new TH1F("h_tag_Lxy", "tag_Lxy", 500, -3.0, 3.0);
-  TH1F* h_probe_Lxy = new TH1F("h_probe_Lxy", "probe_Lxy", 500, -3.0, 3.0);
-  TH1F* h_tag_Lxy_Pass = new TH1F("h_tag_Lxy_Pass", "tag_Lxy_Pass", 500, -3.0, 3.0);
-  TH1F* h_probe_Lxy_Pass = new TH1F("h_probe_Lxy_Pass", "probe_Lxy_Pass", 500, -3.0, 3.0);
+  TH1F* h_tag_Lxy = new TH1F("h_tag_Lxy", "tag_Lxy", 800, -0.5, 0.5);
+  TH1F* h_probe_Lxy = new TH1F("h_probe_Lxy", "probe_Lxy", 800, -0.5, 0.5);
+  TH1F* h_tag_Lxy_Pass = new TH1F("h_tag_Lxy_Pass", "tag_Lxy_Pass", 800, -0.5, 0.5);
+  TH1F* h_probe_Lxy_Pass = new TH1F("h_probe_Lxy_Pass", "probe_Lxy_Pass", 800, -0.5, 0.5);
   
   TH2F* h_tag_pt_pair_dR = new TH2F("h_tag_pt_pair_dR", "tag_pt_pair_dR", 500, 0.0, 500.0, 100, 0., 1.);
   TH2F* h_probe_pt_pair_dR = new TH2F("h_probe_pt_pair_dR", "probe_pt_pair_dR", 500, 0.0, 500.0, 100, 0., 1.);
