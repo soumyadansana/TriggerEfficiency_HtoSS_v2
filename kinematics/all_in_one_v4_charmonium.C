@@ -13,7 +13,7 @@ const int n2_fin[7]={490,258,519,271,429,586,100};
 const char *type[2]={"LooseID_Iso040", "TightID_Iso015"};
 //const int ptr = 1;
 
-const float pt_bins[9]={5, 10, 15, 20, 25, 30, 40, 60, 100};
+const float pt_bins[9]={5, 10, 14, 18, 24, 29, 40, 60, 100};
 
 Double_t dR(TLorentzVector *v1, TLorentzVector *v2) {
   Double_t deta = v1->Eta()-v2->Eta();
@@ -363,7 +363,7 @@ void hist_gen(int ptr=1,int n1=1, int n2=600) {
       probe_relIso04_new = probe_relIso04 - (tag_pt/probe_pt);
       if (probe_relIso04_new < 0) probe_relIso04_new=0;
       
-      if (((tag_hltMu7p5Track2JpsiTrackMassFiltered == 1) && (tag_hltL3fLMu7p5TrackL3Filtered7p5 == 1)) && (pair_dR>=0.1) && (tag_isTight==1) && (tag_pt>8) && (abs(tag_eta)<2.4) && (probe_pt>5) && (abs(probe_eta) < 2.4) && (probe_hltMu7p5Track2JpsiTrackMassFiltered == 1) && probe_isLoose==1 && probe_PFIsoLoose==1 && tag_relIso04_new<1.)
+      if (((tag_hltMu7p5Track2JpsiTrackMassFiltered == 1) && (tag_hltL3fLMu7p5TrackL3Filtered7p5 == 1)) && (pair_dR>=0.1) && (tag_isTight==1) && (tag_pt>8) && (abs(tag_eta)<2.4) && (probe_pt>5) && (abs(probe_eta) < 2.4) && (probe_hltMu7p5Track2JpsiTrackMassFiltered == 1) && abs(tag_dxy)<0.005 && probe_isLoose==1 && probe_PFIsoLoose==1 && tag_relIso04_new<1.)
       {
         //if (tag_HLT_Mu8_v==1) flag=0;
         //if (tag_HLT_Mu17_v==1) flag=1;
@@ -543,7 +543,7 @@ void hist_gen(int ptr=1,int n1=1, int n2=600) {
   
   
   //h_pt_denom1->Draw();
-  TFile* out_file = new TFile(Form("hists_secondset_2017%s_UL_[%d-%d]_filter_matching_charmonium.root",era[ptr-1],n1,n2),"Recreate");
+  TFile* out_file = new TFile(Form("hists_secondset_2017%s_UL_[%d-%d]_filter_matching_charmonium_latest.root",era[ptr-1],n1,n2),"Recreate");
 	
 	cout<<nevts<<endl;
 	//nevts=100;
@@ -665,7 +665,7 @@ void hist_gen(int ptr=1,int n1=1, int n2=600) {
 	
   out_file->Close();
           
-  TFile *flat_file=new TFile(Form("NUM_HLT_IsoMu27_DEN_%s_abseta_pt_genMatched_[%d-%d].root",type[flag_t],n1,n2), "Recreate");
+  TFile *flat_file=new TFile(Form("NUM_HLT_IsoMu27_DEN_%s_abseta_pt_genMatched_[%d-%d]_latest.root",type[flag_t],n1,n2), "Recreate");
     for (int k=0;k<9-1;k++) {
       for (int j=0;j<2;j++) {
         h_mass_dist[k][j]->Write();
