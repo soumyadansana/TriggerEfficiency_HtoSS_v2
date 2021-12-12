@@ -665,10 +665,10 @@ def prepare(baseDir, particle, probe, resonance, era,
             canvas.Modified()
             canvas.Update()
 
-            CMS_lumi.cmsText = 'CMS'
-            CMS_lumi.writeExtraText = True
+            CMS_lumi.cmsText = ' '
+            CMS_lumi.writeExtraText = False
             CMS_lumi.extraText = 'Preliminary'
-            CMS_lumi.lumi_13TeV = "%0.1f fb^{-1}" % (lumi)
+            CMS_lumi.lumi_13TeV = "Run2017B+C+D+E+F"
             CMS_lumi.CMS_lumi(canvas, 4, 0)
 
             if effType == 'trig':
@@ -723,10 +723,10 @@ def prepare(baseDir, particle, probe, resonance, era,
                     canvas.Modified()
                     canvas.Update()
 
-                    CMS_lumi.cmsText = 'CMS'
-                    CMS_lumi.writeExtraText = True
+                    CMS_lumi.cmsText = ' '
+                    CMS_lumi.writeExtraText = False
                     CMS_lumi.extraText = 'Preliminary'
-                    CMS_lumi.lumi_13TeV = "%0.1f fb^{-1}" % (lumi)
+                    CMS_lumi.lumi_13TeV = "Run2017B+C+D+E+F"
                     CMS_lumi.CMS_lumi(canvas, 4, 0)
 
                     if effType == 'trig':

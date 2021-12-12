@@ -538,13 +538,13 @@ void hist_gen(int ptr=1,int n1=1, int n2=600) {
     
     //rootfile->Close();
   }
-  ptr++;
+  //ptr++;
   //}
   //while((ptr>1)&&(ptr<6));
   
   
   //h_pt_denom1->Draw();
-  TFile* out_file = new TFile(Form("hists_secondset_2017%s_UL_[%d-%d]_filter_matching_singlemuon_scaled_new.root",era[ptr-1],n1,n2),"Recreate");
+  TFile* out_file = new TFile(Form("hists_secondset_2017%s_UL_[%d-%d]_filter_matching_singlemuon_scaled_new.root",era[ptr],n1,n2),"Recreate");
 	
 	cout<<nevts<<endl;
 	//nevts=100;
@@ -667,7 +667,7 @@ void hist_gen(int ptr=1,int n1=1, int n2=600) {
   out_file->Close();
           
   if (ptr!=0) return 0;
-  TFile *flat_file=new TFile(Form("NUM_HLT_IsoMu27_DEN_%s_abseta_pt_genMatched_[%d-%d]_2017%s.root",type[flag_t],n1,n2,era[ptr-1]), "Recreate");
+  TFile *flat_file=new TFile(Form("NUM_HLT_IsoMu27_DEN_%s_abseta_pt_genMatched_[%d-%d]_2017%s.root",type[flag_t],n1,n2,era[ptr]), "Recreate");
     for (int k=0;k<9-1;k++) {
       for (int j=0;j<2;j++) {
         h_mass_dist[k][j]->Write();
