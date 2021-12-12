@@ -22,7 +22,7 @@ const float L_int[3]={2.629170,70.672694,573.939406};//2017_UL HLT_Mu20_v in pb-
 
 const char *type[2]={"LooseID_Iso040", "TightID_Iso015"};
 
-const float pt_bins[9]={5, 10, 15, 20, 25, 30, 40, 60, 100};
+const float pt_bins[9]={5, 10, 14, 18, 24, 29, 40, 60, 100};
 
 Double_t dR(TLorentzVector *v1, TLorentzVector *v2) {
   Double_t deta = v1->Eta()-v2->Eta();
