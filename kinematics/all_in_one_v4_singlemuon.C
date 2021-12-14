@@ -367,8 +367,8 @@ void hist_gen(int ptr=1,int n1=1, int n2=600) {
         if (tag_HLT_Mu17_v==1) flag=1;
         if (tag_HLT_Mu20_v==1) flag=2;
         
-	if (ptr!=0) h_wt=1;
-	else h_wt=h_prescale->GetBinContent((int)TMath::Floor(tag_pt));
+	if (ptr==0) h_wt=h_prescale->GetBinContent((int)TMath::Floor(tag_pt));
+        else h_wt=1;
         //h_wt=(cs[0]*L_int[flag])/nevts; //no. of entries will be divided after the whole histogram is made
         //cout<<h_wt<<endl;
         //h_wt=1;
@@ -666,7 +666,7 @@ void hist_gen(int ptr=1,int n1=1, int n2=600) {
 	
   out_file->Close();
           
-  if (ptr!=0) return 0;
+  if (ptr==0) {
   TFile *flat_file=new TFile(Form("NUM_HLT_IsoMu27_DEN_%s_abseta_pt_genMatched_[%d-%d]_2017%s.root",type[flag_t],n1,n2,era[ptr]), "Recreate");
     for (int k=0;k<9-1;k++) {
       for (int j=0;j<2;j++) {
@@ -674,5 +674,6 @@ void hist_gen(int ptr=1,int n1=1, int n2=600) {
     }
   }
   flat_file->Close();
+  }
   return 0;
 }

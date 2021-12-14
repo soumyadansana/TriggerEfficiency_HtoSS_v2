@@ -9,4 +9,6 @@ error = error_$(ptr)_$(n1)_$(inc).txt
 output = out_$(ptr)_$(n1)_$(inc).txt
 log = log_$(ptr)_$(n1)_$(inc).txt
 
++JobFlavour = "microcentury"
+
 queue ptr,n1,inc from params.txt
